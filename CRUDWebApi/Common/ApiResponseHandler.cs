@@ -19,11 +19,15 @@ public static class ApiResponseHandler
             case 204:
                 return new NoContentResult();
 
-            case 409:
-                return new ConflictObjectResult(response);
+            case 400:
+                return new BadRequestObjectResult(response);
 
             case 404:
                 return new NotFoundObjectResult(response);
+
+            case 409:
+                return new ConflictObjectResult(response);
+
 
             default:
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);

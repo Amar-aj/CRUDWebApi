@@ -31,13 +31,19 @@ public class EmployeeService : IEmployeeService
 
             using (var response = await connection.QueryMultipleAsync("sp_Employee", parameters, commandType: CommandType.StoredProcedure))
             {
-                // Read the  data
-                var data = response.Read<GetEmployeeDto>().FirstOrDefault();
                 // Read the status code
                 int statusCode = response.Read<int>().FirstOrDefault();
                 // Read the message
                 var message = response.Read<string>().FirstOrDefault();
-                return new ApiResponse<GetEmployeeDto>(true, data, message, statusCode);
+                GetEmployeeDto getEmployeeDto=new GetEmployeeDto();
+                if (statusCode==201)
+                {
+                    getEmployeeDto = response.Read<GetEmployeeDto>().FirstOrDefault();
+                    return new ApiResponse<GetEmployeeDto>(true, getEmployeeDto, message, statusCode);
+                }
+               
+
+                return new ApiResponse<GetEmployeeDto>(true, null, message, statusCode);
             }
         }
     }
